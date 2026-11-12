@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ===== SEO (Technical Implementation rubric) ===== -->
+  <!-- ===== SEO ===== -->
   <title>Andrei Profeta | Developer Portfolio | DCIT 26 CvSU Bacoor</title>
   <meta name="description" content="Personal portfolio of Andrei Profeta, BS Computer Science student at Cavite State University Bacoor City Campus. Projects, certificates, and contact." />
   <meta name="keywords" content="Andrei Profeta, web developer, portfolio, CvSU Bacoor, DCIT 26, computer science" />
@@ -18,7 +18,10 @@
   {"@context":"https://schema.org","@type":"Person","name":"Andrei Profeta","jobTitle":"BS Computer Science Student","affiliation":"Cavite State University Bacoor City Campus"}
   </script>
 
-  <!-- ===== Type pairing: Archivo Black (display) + Space Grotesk (body) + JetBrains Mono (labels) ===== -->
+  <!-- Flag JS early so reveal styles only hide content when JS can un-hide it -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- ===== Type pairing ===== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -47,6 +50,7 @@
       font-family:var(--body);font-size:1.05rem;line-height:1.65;
       -webkit-font-smoothing:antialiased;overflow-x:hidden;
     }
+    body.menu-open{overflow:hidden}
     ::selection{background:var(--acid);color:var(--ink)}
     img{display:block;max-width:100%}
     a{color:inherit;text-decoration:none}
@@ -70,12 +74,12 @@
       0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,3%)}
       50%{transform:translate(3%,-2%)}75%{transform:translate(-3%,-3%)}
     }
-    #progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--acid);z-index:250}
+    #progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--acid);z-index:250;transition:width .1s linear}
     #cursor{
       position:fixed;top:0;left:0;width:14px;height:14px;border-radius:50%;
       background:var(--acid);z-index:300;pointer-events:none;opacity:0;
       display:flex;align-items:center;justify-content:center;
-      transition:width .35s var(--ease),height .35s var(--ease),background .3s;
+      transition:width .35s var(--ease),height .35s var(--ease),background .3s,opacity .3s;
     }
     #cursor span{font-family:var(--mono);font-size:.55rem;font-weight:700;letter-spacing:.1em;color:var(--ink);opacity:0;transition:opacity .2s}
     #cursor.grow{width:72px;height:72px}
@@ -115,7 +119,7 @@
     .overlay-menu .mono{color:rgba(237,232,220,.5);margin-top:2rem}
 
     /* ============================================================
-       4. HERO : typographic poster, not a template hero
+       4. HERO
     ============================================================ */
     .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:110px}
     .hero-grid{display:grid;grid-template-columns:1fr 260px;gap:3rem;align-items:end;flex:1;padding-bottom:3rem}
@@ -148,35 +152,59 @@
     .rail dt{color:rgba(237,232,220,.5)}
     .rail dd{text-align:right;color:var(--acid)}
 
-    /* marquee */
+    /* marquee — no gap, padding inside each item keeps the -50% loop seamless */
     .marquee{border-block:1px solid var(--line);overflow:hidden;padding:.85rem 0}
-    .marquee-track{display:flex;gap:2.5rem;width:max-content;animation:scrollX 26s linear infinite}
+    .marquee-track{display:flex;width:max-content;animation:scrollX 26s linear infinite}
     .marquee:hover .marquee-track{animation-play-state:paused}
-    .marquee-track span{font-family:var(--display);font-size:1rem;letter-spacing:.06em;white-space:nowrap;text-transform:uppercase}
+    .marquee-track span{font-family:var(--display);font-size:1rem;letter-spacing:.06em;white-space:nowrap;text-transform:uppercase;padding-right:2.5rem}
     .marquee-track i{font-style:normal;color:var(--acid)}
-    @keyframes scrollX{to{transform:translateX(-50%)}}
+    @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
     /* ============================================================
-       5. SECTION SCAFFOLD
+       5. SECTION SCAFFOLD + REVEALS
     ============================================================ */
     .sec{padding:clamp(4.5rem,9vw,8rem) 0;border-bottom:1px solid var(--line);position:relative}
     .sec-head{display:flex;align-items:flex-end;gap:2rem;margin-bottom:clamp(2.5rem,5vw,4.5rem)}
     .sec-index{font-size:clamp(3.4rem,8vw,7rem);color:transparent;-webkit-text-stroke:1.5px rgba(237,232,220,.35);line-height:.8}
     .sec-head h2{font-size:clamp(2.2rem,6vw,4.6rem)}
+
+    /* masked lines */
     .lm{display:block;overflow:hidden}
-    .lm>span{display:inline-block;transform:translateY(115%);transition:transform .9s var(--ease) var(--d,0s)}
-    .in-view .lm>span{transform:none}
-    [data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease) var(--d,0s),transform .7s var(--ease) var(--d,0s)}
-    [data-reveal].in-view,.in-view [data-reveal]{opacity:1;transform:none}
+    .lm>span{display:inline-block}
+
+    /* reveals only arm themselves when JS is present */
+    .js .lm>span{transform:translateY(115%);transition:transform .9s var(--ease) var(--d,0s)}
+    .js .in-view .lm>span{transform:none}
+
+    .js [data-reveal]{
+      opacity:0;transform:translateY(26px);
+      transition:opacity .7s var(--ease) var(--d,0s),transform .7s var(--ease) var(--d,0s);
+    }
+    .js [data-reveal].in-view{opacity:1;transform:none}
 
     /* ============================================================
-       6. ABOUT : sticky two-column
+       6. ABOUT
     ============================================================ */
     .about-grid{display:grid;grid-template-columns:360px 1fr;gap:clamp(2rem,5vw,5rem);align-items:start}
     .about-left{position:sticky;top:110px}
-    .portrait{position:relative;border:1px solid var(--line);overflow:hidden;aspect-ratio:3/4;background:var(--acid)}
-    .portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1);animation:breathe 14s ease-in-out infinite alternate}
-    .portrait::after{content:"";position:absolute;inset:0;background:var(--acid);mix-blend-mode:multiply;pointer-events:none}
+    .portrait{
+      position:relative;border:1px solid var(--line);overflow:hidden;
+      aspect-ratio:3/4;background:var(--ink-3);isolation:isolate;
+    }
+    .portrait img{
+      width:100%;height:100%;object-fit:cover;
+      filter:grayscale(1) contrast(1.06) brightness(.95);
+      animation:breathe 14s ease-in-out infinite alternate;
+      transition:filter .6s var(--ease);
+    }
+    /* subtle duotone: hue only, low opacity — never a solid green block */
+    .portrait::after{
+      content:"";position:absolute;inset:0;background:var(--acid);
+      mix-blend-mode:color;opacity:.16;pointer-events:none;
+      transition:opacity .6s var(--ease);
+    }
+    .portrait:hover::after{opacity:.04}
+    .portrait:hover img{filter:grayscale(.15) contrast(1.03)}
     @keyframes breathe{from{transform:scale(1)}to{transform:scale(1.09) translate(-1.5%,1.5%)}}
     .portrait-cap{display:flex;justify-content:space-between;padding:.7rem .2rem;color:rgba(237,232,220,.55)}
     .stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);margin-top:1.4rem}
@@ -190,7 +218,7 @@
     .skill{display:grid;grid-template-columns:150px 1fr 46px;align-items:center;gap:1rem;padding:.65rem 0;border-bottom:1px solid var(--line)}
     .skill-name{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase}
     .bar{height:8px;background:var(--ink-3);position:relative;overflow:hidden}
-    .bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--acid);transition:width 1.2s var(--ease) var(--d,0s)}
+    .bar i{position:absolute;top:0;bottom:0;left:0;width:0;background:var(--acid);transition:width 1.2s var(--ease) var(--d,0s)}
     .skill-rows.in-view .bar i{width:var(--w)}
     .skill-pct{font-family:var(--mono);font-size:.7rem;text-align:right;color:var(--acid)}
     .tags{display:flex;flex-wrap:wrap;gap:.6rem}
@@ -199,7 +227,7 @@
     .tags li:hover{background:var(--acid);color:var(--ink);border-color:var(--acid);transform:translateY(-2px)}
 
     /* ============================================================
-       7. WORKS : filter + sticky stacked cards
+       7. WORKS
     ============================================================ */
     .filters{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:2.5rem}
     .filters button{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
@@ -222,20 +250,31 @@
     .tech span{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:var(--ink-3);padding:.4rem .7rem}
     .pcard-link{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--acid);width:max-content;border-bottom:1px solid var(--acid);padding-bottom:.2rem;transition:.3s}
     .pcard-link:hover{color:var(--signal);border-color:var(--signal)}
-    .duotone{position:relative;overflow:hidden;background:var(--acid);min-height:240px}
-    .duotone img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15);transition:transform .8s var(--ease),filter .5s}
-    .duotone::after{content:"";position:absolute;inset:0;background:var(--acid);mix-blend-mode:multiply;pointer-events:none}
-    .pcard:hover .duotone img{transform:scale(1.05);filter:grayscale(0) contrast(1)}
+
+    /* image panel — grayscale + whisper of acid, full colour on hover */
+    .duotone{position:relative;overflow:hidden;background:var(--ink-3);min-height:240px;isolation:isolate}
+    .duotone img{
+      width:100%;height:100%;object-fit:cover;
+      filter:grayscale(1) contrast(1.06) brightness(.94);
+      transition:transform .8s var(--ease),filter .6s var(--ease);
+    }
+    .duotone::after{
+      content:"";position:absolute;inset:0;background:var(--acid);
+      mix-blend-mode:color;opacity:.16;pointer-events:none;
+      transition:opacity .6s var(--ease);
+    }
+    .pcard:hover .duotone img{transform:scale(1.04);filter:grayscale(.1) contrast(1.02) brightness(1)}
+    .pcard:hover .duotone::after{opacity:0}
     .pcard.hide{display:none}
     .pcard.pop{animation:pop .5s var(--ease)}
-    @keyframes pop{from{opacity:0;transform:translateY(18px)}}
+    @keyframes pop{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
     /* certificates ledger */
     .cert{display:grid;grid-template-columns:80px 1fr auto 40px;gap:1.2rem;align-items:center;
       padding:1.15rem .8rem;border-bottom:1px solid var(--line);transition:.3s}
     .cert:first-of-type{border-top:1px solid var(--line)}
     .cert .yr,.cert .cid{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:rgba(237,232,220,.55)}
-    .cert h4{font-size:1.02rem;font-weight:700}
+    .cert h4{font-size:1.02rem;font-weight:700;line-height:1.3}
     .cert small{display:block;color:rgba(237,232,220,.55);font-size:.82rem}
     .cert .arr{font-size:1.1rem;transition:transform .3s}
     .cert:hover{background:var(--acid);color:var(--ink)}
@@ -246,7 +285,7 @@
        8. CONTACT
     ============================================================ */
     .contact-title{font-size:clamp(3rem,11vw,9.5rem)}
-    .contact-title .outline span{color:transparent;-webkit-text-stroke:2px var(--bone);transition:color .4s}
+    .contact-title .outline span{color:transparent;-webkit-text-stroke:2px var(--bone);transition:color .4s,-webkit-text-stroke-color .4s}
     .contact-title .outline:hover span{color:var(--signal);-webkit-text-stroke-color:var(--signal)}
     .email-row{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;margin:2.2rem 0 2.6rem}
     #copyEmail{font-family:var(--display);font-size:clamp(1.1rem,3.4vw,2.2rem);text-transform:lowercase;
@@ -274,10 +313,11 @@
     ============================================================ */
     @media(max-width:1024px){
       .hero-grid{grid-template-columns:1fr}
-      .hero-rail{flex-direction:row;align-items:center;justify-content:flex-start}
+      .hero-rail{flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap}
       .about-grid{grid-template-columns:1fr}
       .about-left{position:static;max-width:420px}
-      .pcard{grid-template-columns:1fr}
+      .pcard{grid-template-columns:1fr;position:static} /* stacked sticky cards get janky on small screens */
+      .duotone{min-height:220px;order:-1}
     }
     @media(max-width:860px){
       .nav-links,#clock{display:none}
@@ -294,7 +334,9 @@
       html{scroll-behavior:auto}
       *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
       .marquee-track,.badge svg,.portrait img,.noise{animation:none!important}
-      [data-reveal],.lm>span{opacity:1;transform:none}
+      .js [data-reveal]{opacity:1;transform:none}
+      .js .lm>span{transform:none}
+      .skill-rows .bar i{width:var(--w)}
     }
   </style>
 </head>
@@ -318,7 +360,7 @@
         </ul>
       </nav>
       <span class="mono" id="clock" title="Philippine Standard Time">--:--:-- PHT</span>
-      <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false">
+      <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="overlayMenu">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -343,9 +385,7 @@
             <span class="line outline"><span data-scramble>PROFETA</span><em class="tag">the developer</em></span>
           </h1>
           <p class="hero-lede" data-reveal style="--d:.15s">
-            A second year Computer Science student from Bacoor building honest, human
-            interfaces, one commit at a time. I believe a blank <strong style="color:var(--acid)">.html</strong>
-            file is a blank page, and type is the loudest voice on it.
+            I'm a third year Computer Science student from Bacoor who builds things for the web because I like seeing ideas actually work. Most of my projects start small, a school requirement or a personal what if, and grow from there.
           </p>
           <div class="hero-cta" data-reveal style="--d:.3s">
             <a class="btn btn-solid" href="#works">View works ↓</a>
@@ -357,22 +397,22 @@
           <div class="badge" aria-hidden="true">
             <svg viewBox="0 0 100 100">
               <defs><path id="circ" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
-              <text><textPath href="#circ" textLength="238" lengthAdjust="spacingAndGlyphs">OPEN TO INTERNSHIPS ✦ DCIT 26 ✦ CVSU BACOOR ✦ </textPath></text>
+              <text><textPath href="#circ" textLength="238" lengthAdjust="spacingAndGlyphs">OPEN TO CONTACT ✦ DCIT 26 ✦ CVSU BACOOR ✦ </textPath></text>
             </svg>
             <em>↗</em>
           </div>
           <dl class="rail mono">
             <div><dt>Based in</dt><dd>Bacoor, Cavite, PH</dd></div>
             <div><dt>Studying</dt><dd>BS Computer Science</dd></div>
-            <div><dt>Focus</dt><dd>Web · UI · Emerging Tech</dd></div>
+            <div><dt>Focus</dt><dd>Web · Digital Art · Emerging Tech</dd></div>
           </dl>
         </aside>
       </div>
 
       <div class="marquee" aria-hidden="true">
         <div class="marquee-track">
-          <span>HTML <i>✦</i> CSS GRID <i>✦</i> JAVASCRIPT <i>✦</i> REACT <i>✦</i> FIGMA <i>✦</i> GIT <i>✦</i> FIREBASE <i>✦</i> CLEAN TYPE <i>✦</i> BOLD IDEAS <i>✦</i>&nbsp;</span>
-          <span>HTML <i>✦</i> CSS GRID <i>✦</i> JAVASCRIPT <i>✦</i> REACT <i>✦</i> FIGMA <i>✦</i> GIT <i>✦</i> FIREBASE <i>✦</i> CLEAN TYPE <i>✦</i> BOLD IDEAS <i>✦</i>&nbsp;</span>
+          <span>HTML <i>✦</i> CSS GRID <i>✦</i> JAVASCRIPT <i>✦</i> JAVA <i>✦</i> GIT <i>✦</i> MYSQL <i>✦</i> MONGODB <i>✦</i> DIGITAL ART <i>✦</i> BOLD IDEAS <i>✦</i>&nbsp;</span>
+          <span>HTML <i>✦</i> CSS GRID <i>✦</i> JAVASCRIPT <i>✦</i> JAVA <i>✦</i> GIT <i>✦</i> MYSQL <i>✦</i> MONGODB <i>✦</i> DIGITAL ART <i>✦</i> BOLD IDEAS <i>✦</i>&nbsp;</span>
         </div>
       </div>
     </section>
@@ -396,34 +436,28 @@
           <div class="stats">
             <div><b data-count="3">0</b><small>Projects built</small></div>
             <div><b data-count="4">0</b><small>Certificates</small></div>
-            <div><b data-count="3">0</b><small>Hackathons</small></div>
+            <div><b data-count="99">0</b><small>Problems</small></div>
           </div>
         </div>
 
         <div class="about-copy">
-          <p data-reveal>Hi, I&#8217;m <strong>Andrei Profeta</strong>, a second year BS Computer Science student at
-            Cavite State University Bacoor City Campus. I fell for the web the day I realized a plain
-            text file could become anything: a tool, a story, a small piece of someone&#8217;s day.</p>
-          <p data-reveal style="--d:.1s">My focus sits where engineering meets design: <strong>semantic markup, honest
-            performance budgets, and typography that carries the message before a single image loads.</strong>
-            I treat every requirement, even a midterm project, like a product someone will actually use.</p>
-          <p data-reveal style="--d:.2s">Right now I&#8217;m deepening my React fundamentals, preparing for industry
-            immersion, and documenting every build so I can look back and see how far the commits have come.</p>
+          <p data-reveal>I'm <strong>Andrei Profeta</strong>, third year BS Computer Science at CvSU Bacoor. I build web things, break web things, and then fix them slightly better than before.</p>
+          <p data-reveal style="--d:.1s">This portfolio is where I keep the results: school requirements that turned into real projects, personal experiments, and the occasional idea that wouldn't leave me alone. Currently splitting my time between personal builds and digital art, and documenting everything so future me has something to look back on.</p>
 
           <p class="sub-label mono" data-reveal>// Core skills</p>
           <div class="skill-rows" data-reveal>
             <div class="skill"><span class="skill-name">HTML / CSS</span><span class="bar" style="--w:92%"><i></i></span><span class="skill-pct">92</span></div>
             <div class="skill"><span class="skill-name">JavaScript</span><span class="bar" style="--w:85%;--d:.1s"><i></i></span><span class="skill-pct">85</span></div>
             <div class="skill"><span class="skill-name">Java / OOP</span><span class="bar" style="--w:88%;--d:.2s"><i></i></span><span class="skill-pct">88</span></div>
-            <div class="skill"><span class="skill-name">UI / Figma</span><span class="bar" style="--w:88%;--d:.3s"><i></i></span><span class="skill-pct">88</span></div>
-            <div class="skill"><span class="skill-name">React</span><span class="bar" style="--w:74%;--d:.4s"><i></i></span><span class="skill-pct">74</span></div>
+            <div class="skill"><span class="skill-name">Excel</span><span class="bar" style="--w:88%;--d:.3s"><i></i></span><span class="skill-pct">88</span></div>
+            <div class="skill"><span class="skill-name">Digital Art</span><span class="bar" style="--w:80%;--d:.4s"><i></i></span><span class="skill-pct">80</span></div>
             <div class="skill"><span class="skill-name">Git / GitHub</span><span class="bar" style="--w:80%;--d:.5s"><i></i></span><span class="skill-pct">80</span></div>
             <div class="skill"><span class="skill-name">Python</span><span class="bar" style="--w:70%;--d:.6s"><i></i></span><span class="skill-pct">70</span></div>
           </div>
 
           <p class="sub-label mono" data-reveal>// Toolbox</p>
           <ul class="tags" data-reveal>
-            <li>VS Code</li><li>NetBeans</li><li>Figma</li><li>GitHub</li><li>Firebase</li>
+            <li>VS Code</li><li>NetBeans</li><li>MS Excel</li><li>Krita</li><li>GitHub</li><li>Firebase</li>
             <li>Vercel</li><li>Netlify</li><li>Postman</li><li>Chrome DevTools</li>
           </ul>
         </div>
@@ -449,7 +483,7 @@
         </div>
 
         <div class="stack">
-          <!-- Project 01 - Smart Hamster Habitat -->
+          <!-- Project 01 -->
           <article class="pcard" data-cat="experiment" data-cursor="view">
             <div class="pcard-info">
               <div class="pcard-top mono"><b>01</b><span>Hardware · IoT · 2026</span></div>
@@ -461,7 +495,7 @@
             <div class="duotone"><img src="pictures/hamster.png" alt="Smart Hamster Habitat 3D CAD concept with interlock system" loading="lazy" /></div>
           </article>
 
-          <!-- Project 02 - Restaurant Ordering System -->
+          <!-- Project 02 -->
           <article class="pcard" data-cat="desktop" data-cursor="view">
             <div class="pcard-info">
               <div class="pcard-top mono"><b>02</b><span>Desktop · ITEC 50 · 2026</span></div>
@@ -473,7 +507,7 @@
             <div class="duotone"><img src="pictures/restaurant.png" alt="Restaurant Ordering System Java Swing desktop application interface" loading="lazy" /></div>
           </article>
 
-          <!-- Project 03 - Polyglot Catalog -->
+          <!-- Project 03 -->
           <article class="pcard" data-cat="web" data-cursor="view">
             <div class="pcard-info">
               <div class="pcard-top mono"><b>03</b><span>Full stack · 2026</span></div>
@@ -488,25 +522,25 @@
 
         <p class="sub-label mono" style="margin-top:4rem">( Certificates &amp; credentials, click to open PDF )</p>
         <div data-reveal>
-          <a class="cert" href="certificates/cert-google-sites.pdf" target="_blank" rel="noopener" type="application/pdf">
+          <a class="cert" href="certificates/cert-google-sites.pdf" target="_blank" rel="noopener">
             <span class="yr">2026</span>
-            <span><h4>Build a Portfolio with Google Sites</h4><small>Google for Education</small></span>
-            <span class="cid">ID 489301338</span><span class="arr">↗</span>
+            <div class="cert-body"><h4>Build a Portfolio with Google Sites</h4><small>Google for Education</small></div>
+            <span class="cid">ID 489301338</span><span class="arr" aria-hidden="true">↗</span>
           </a>
-          <a class="cert" href="certificates/cert-adb-water.pdf" target="_blank" rel="noopener" type="application/pdf">
+          <a class="cert" href="certificates/cert-adb-water.pdf" target="_blank" rel="noopener">
             <span class="yr">2026</span>
-            <span><h4>Water Security &amp; Resilience in Asia Pacific</h4><small>Asian Development Bank</small></span>
-            <span class="cid">ADB WATER 26</span><span class="arr">↗</span>
+            <div class="cert-body"><h4>Water Security &amp; Resilience in Asia Pacific</h4><small>Asian Development Bank</small></div>
+            <span class="cid">ADB WATER 26</span><span class="arr" aria-hidden="true">↗</span>
           </a>
-          <a class="cert" href="certificates/cert-cisco-html.pdf" target="_blank" rel="noopener" type="application/pdf">
+          <a class="cert" href="certificates/cert-cisco-html.pdf" target="_blank" rel="noopener">
             <span class="yr">2025</span>
-            <span><h4>HTML Essentials</h4><small>Cisco Networking Academy (DICT ITU)</small></span>
-            <span class="cid">CISCO HTML 25</span><span class="arr">↗</span>
+            <div class="cert-body"><h4>HTML Essentials</h4><small>Cisco Networking Academy (DICT ITU)</small></div>
+            <span class="cid">CISCO HTML 25</span><span class="arr" aria-hidden="true">↗</span>
           </a>
-          <a class="cert" href="certificates/cert-cvsu-assembly.pdf" target="_blank" rel="noopener" type="application/pdf">
+          <a class="cert" href="certificates/cert-cvsu-assembly.pdf" target="_blank" rel="noopener">
             <span class="yr">2025</span>
-            <span><h4>BSCS General Assembly 2025</h4><small>Cavite State University Bacoor Campus</small></span>
-            <span class="cid">CvSU ACS 25</span><span class="arr">↗</span>
+            <div class="cert-body"><h4>BSCS General Assembly 2025</h4><small>Cavite State University Bacoor Campus</small></div>
+            <span class="cid">CvSU ACS 25</span><span class="arr" aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
@@ -526,8 +560,7 @@
       </div>
 
       <div class="wrap">
-        <p data-reveal style="max-width:52ch">For internships, collaborations, course collabs, or plain shop talk
-           about type and code, send a signal. I reply within 48 hours.</p>
+        <p data-reveal style="max-width:52ch">If you want to build something together, ask me about my projects, or just talk, my inbox is open. I read everything myself and I usually reply within a day or two.</p>
 
         <div class="email-row" data-reveal>
           <button id="copyEmail" title="Click to copy">andrei.profeta@cvsu.edu.ph</button>
@@ -558,75 +591,94 @@
     </div>
   </footer>
 
-  <div id="toast" role="status">Message queued, salamat! I&#8217;ll reply within 48 hours.</div>
-
   <script>
   (function(){
     'use strict';
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $  = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
 
     /* ---------- Manila clock ---------- */
-    const clock = document.getElementById('clock');
+    const clock = $('#clock');
     const fmt = new Intl.DateTimeFormat('en-PH',{timeZone:'Asia/Manila',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-    const tick = () => clock.textContent = fmt.format(new Date()) + ' PHT';
+    const tick = () => { clock.textContent = fmt.format(new Date()) + ' PHT'; };
     tick(); setInterval(tick, 1000);
 
-    /* ---------- Scroll progress bar ---------- */
-    const bar = document.getElementById('progress');
-    addEventListener('scroll', () => {
+    /* ---------- Scroll progress (guarded against divide-by-zero) ---------- */
+    const bar = $('#progress');
+    const updateProgress = () => {
       const h = document.documentElement;
-      bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-    }, {passive:true});
+      const max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? Math.min(h.scrollTop / max, 1) * 100 : 0) + '%';
+    };
+    addEventListener('scroll', updateProgress, {passive:true});
+    addEventListener('resize', updateProgress);
+    updateProgress();
 
-    /* ---------- Scramble-decode titles (typographic storytelling) ---------- */
+    /* ---------- Scramble-decode titles ---------- */
     const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&@$0123456789';
     function scramble(el){
       const final = el.dataset.text || el.textContent;
       el.dataset.text = final;
       if (reduced){ el.textContent = final; return; }
       clearInterval(el._t);
-      let frame = 0; const total = Math.max(16, final.length * 2.2);
+      let frame = 0;
+      const total = Math.max(16, final.length * 2.2);
       el._t = setInterval(() => {
         frame++;
         let out = '';
         for (let i = 0; i < final.length; i++){
           const lock = (i / final.length) * total * 0.7 + 4;
-          out += frame > lock ? final[i] : CHARS[Math.random() * CHARS.length | 0];
+          out += frame > lock ? final[i] : CHARS[(Math.random() * CHARS.length) | 0];
         }
         el.textContent = out;
         if (frame >= total){ clearInterval(el._t); el.textContent = final; }
       }, 30);
     }
-    document.querySelectorAll('[data-scramble]').forEach((el, i) =>
-      setTimeout(() => scramble(el), 250 + i * 350));
-    document.querySelectorAll('.hero-title .line').forEach(line =>
-      line.addEventListener('mouseenter', () => line.querySelectorAll('[data-scramble]').forEach(scramble)));
+    const heroSpans = $$('[data-scramble]');
+    heroSpans.forEach((el, i) => setTimeout(() => scramble(el), 250 + i * 350));
+    $$('.hero-title .line').forEach(line =>
+      line.addEventListener('mouseenter', () => $$('[data-scramble]', line).forEach(scramble)));
 
-    /* ---------- Scroll reveals, masks, bars, counters ---------- */
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('in-view');
-        e.target.querySelectorAll('[data-count]').forEach(el => {
-          const end = +el.dataset.count, dur = 1200, t0 = performance.now();
-          if (reduced){ el.textContent = String(end).padStart(2,'0'); return; }
-          (function step(t){
-            const p = Math.min((t - t0) / dur, 1);
-            el.textContent = String(Math.round(end * (1 - Math.pow(1 - p, 3)))).padStart(2,'0');
-            if (p < 1) requestAnimationFrame(step);
-          })(t0);
+    /* ---------- Count-up ---------- */
+    function countUp(el){
+      const end = Number(el.dataset.count) || 0;
+      if (reduced){ el.textContent = String(end).padStart(2,'0'); return; }
+      const dur = 1100, t0 = performance.now();
+      (function step(t){
+        const p = Math.min((t - t0) / dur, 1);
+        el.textContent = String(Math.round(end * (1 - Math.pow(1 - p, 3)))).padStart(2,'0');
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    }
+
+    /* ---------- Scroll reveals ---------- */
+    const revealTargets = $$('[data-reveal], .sec-head');
+
+    function revealNow(el){
+      el.classList.add('in-view');
+      $$('[data-count]', el).forEach(countUp);
+      if (el.hasAttribute('data-count')) countUp(el);
+    }
+
+    if (!('IntersectionObserver' in window)){
+      revealTargets.forEach(revealNow);
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          revealNow(e.target);
+          io.unobserve(e.target);
         });
-        io.unobserve(e.target);
-      });
-    }, {threshold:.18});
-    document.querySelectorAll('[data-reveal], .sec-head, .skill-rows, .hero-rail, .hero-lede, .hero-cta, .eyebrow')
-      .forEach(el => io.observe(el));
+      }, {threshold:.15, rootMargin:'0px 0px -6% 0px'});
+      revealTargets.forEach(el => io.observe(el));
+    }
 
     /* ---------- Project filters ---------- */
-    const cards = document.querySelectorAll('.pcard');
-    document.querySelectorAll('.filters button').forEach(btn => {
+    const cards = $$('.pcard');
+    $$('.filters button').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+        $$('.filters button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const f = btn.dataset.filter;
         cards.forEach(c => {
@@ -637,7 +689,7 @@
       });
     });
 
-    /* ---------- Spotlight hover on cards ---------- */
+    /* ---------- Spotlight hover ---------- */
     cards.forEach(c => c.addEventListener('mousemove', e => {
       const r = c.getBoundingClientRect();
       c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
@@ -645,43 +697,69 @@
     }));
 
     /* ---------- Custom cursor ---------- */
-    const cursor = document.getElementById('cursor'), label = document.getElementById('cursorLabel');
+    const cursor = $('#cursor'), label = $('#cursorLabel');
     if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reduced){
       document.body.classList.add('has-cursor');
-      let x = innerWidth/2, y = innerHeight/2, cx = x, cy = y;
-      addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; cursor.style.opacity = 1; });
-      (function loop(){
-        cx += (x - cx) * .18; cy += (y - cy) * .18;
-        cursor.style.transform = 'translate(' + (cx - cursor.offsetWidth/2) + 'px,' + (cy - cursor.offsetHeight/2) + 'px)';
-        requestAnimationFrame(loop);
-      })();
-      document.addEventListener('mouseover', e => {
-        const t = e.target.closest('a, button, [data-cursor]');
-        cursor.classList.toggle('grow', !!t);
-        label.textContent = t && t.closest('[data-cursor="view"]') ? 'VIEW' : '';
+      let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y, raf = null;
+      addEventListener('mousemove', e => {
+        x = e.clientX; y = e.clientY;
+        cursor.style.opacity = 1;
+        if (!raf) raf = requestAnimationFrame(loop);
       });
+      function loop(){
+        cx += (x - cx) * .18;
+        cy += (y - cy) * .18;
+        cursor.style.transform =
+          'translate(' + (cx - cursor.offsetWidth / 2) + 'px,' + (cy - cursor.offsetHeight / 2) + 'px)';
+        if (Math.abs(x - cx) > .1 || Math.abs(y - cy) > .1){
+          raf = requestAnimationFrame(loop);
+        } else {
+          raf = null;
+        }
+      }
+      document.addEventListener('mouseover', e => {
+        const view  = e.target.closest('[data-cursor="view"]');
+        const hit   = e.target.closest('a, button, [data-cursor]');
+        cursor.classList.toggle('grow', !!hit);
+        label.textContent = view ? 'VIEW' : '';
+      });
+      document.addEventListener('mouseleave', () => { cursor.style.opacity = 0; });
     }
 
     /* ---------- Copy email ---------- */
-    const copyBtn = document.getElementById('copyEmail'), hint = document.getElementById('copyHint');
+    const copyBtn = $('#copyEmail'), hint = $('#copyHint');
     copyBtn.addEventListener('click', () => {
-      (navigator.clipboard ? navigator.clipboard.writeText(copyBtn.textContent) : Promise.reject())
-        .catch(() => {});
-      hint.textContent = '[ copied ✓ ]'; hint.classList.add('done');
+      const text = copyBtn.textContent.trim();
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).catch(() => {});
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch(_) {}
+        document.body.removeChild(ta);
+      }
+      hint.textContent = '[ copied ✓ ]';
+      hint.classList.add('done');
       setTimeout(() => { hint.textContent = '[ click to copy ]'; hint.classList.remove('done'); }, 1800);
     });
 
     /* ---------- Mobile menu / back to top / year ---------- */
-    const burger = document.getElementById('burger');
+    const burger = $('#burger');
+    function closeMenu(){
+      document.body.classList.remove('menu-open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
     burger.addEventListener('click', () => {
       const open = document.body.classList.toggle('menu-open');
-      burger.setAttribute('aria-expanded', open);
+      burger.setAttribute('aria-expanded', String(open));
     });
-    document.querySelectorAll('.overlay-menu a').forEach(a =>
-      a.addEventListener('click', () => document.body.classList.remove('menu-open')));
-    document.getElementById('toTop').addEventListener('click', () =>
+    $$('.overlay-menu a').forEach(a => a.addEventListener('click', closeMenu));
+    addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+    $('#toTop').addEventListener('click', () =>
       scrollTo({top:0, behavior: reduced ? 'auto' : 'smooth'}));
-    document.getElementById('year').textContent = new Date().getFullYear();
+    $('#year').textContent = new Date().getFullYear();
   })();
   </script>
 </body>
